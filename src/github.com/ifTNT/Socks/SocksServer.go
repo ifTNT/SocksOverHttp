@@ -17,9 +17,17 @@ const (
 	CONNECT     = 0x01
 	IPv4        = 0x01
 	DOMAINNAME  = 0x03
-
-	iota      = 0x00
-	SUCCESSED = iota
+)
+const ( //Reply
+	SUCCEED             = iota
+	GEN_SOKCS_FAIL      = iota
+	BLOCK_BY_RULES      = iota
+	NETWORK_UNREACHABLE = iota
+	HOST_UNREACHABLE    = iota
+	CONN_REFUSED        = iota
+	TTL_EXPIRED         = iota
+	UNKNOW_COMMAND      = iota
+	ADDR_TYPE_UNSUPPORT = iota
 )
 
 type SocksServer struct {
@@ -87,16 +95,28 @@ func (s *SocksServer) preHandle(conn *net.TCPConn, ch_data chan []byte, ch_err c
 							TempAddr := net.TCPAddr{data[len(data)-6 : len(data)-2], int(data[len(data)-2])<<8 + int(data[len(data)-1]), ""}
 							NewSocksConn.RemoteAddr.Host = TempAddr.IP.String()
 							NewSocksConn.RemoteAddr.Port = TempAddr.Port
+						} else {
+							conn.Write([]byte{VER, ADDR_TYPE_UNSUPPORT, RSV, IPv4, 0, 0, 0, 0, 0, 0})
+							conn.Close()
+							return
 						}
 					case DOMAINNAME:
 						NewSocksConn.RemoteAddr.Host = bytes.NewBuffer(data[4 : len(data)-2]).String()
 						NewSocksConn.RemoteAddr.Port = int(data[len(data)-2]<<8 + data[len(data)-1])
+					default:
+						conn.Write([]byte{VER, ADDR_TYPE_UNSUPPORT, RSV, IPv4, 0, 0, 0, 0, 0, 0})
+						conn.Close()
+						return
 					}
 					NewSocksConn.conn = conn
 					NewSocksConn.mother = s
 					NewSocksConn.writeBuf = bytes.NewBuffer([]byte{})
 					fmt.Println("Remote address of socksConn change to " + NewSocksConn.RemoteAddr2String())
 					go callback(&NewSocksConn, data, false)
+				} else {
+					conn.Write([]byte{VER, UNKNOW_COMMAND, RSV, IPv4, 0, 0, 0, 0, 0, 0})
+					conn.Close()
+					return
 				}
 			} else if NewSocksConn.RemoteAddr.Host != "" {
 				go callback(&NewSocksConn, data, true)

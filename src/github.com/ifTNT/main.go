@@ -22,7 +22,7 @@ func main() {
 			fmt.Println("Handler ended")
 		} else {
 			fmt.Println("Force return can connect")
-			conn.SetCanConnect(Socks.SUCCESSED)
+			conn.SetCanConnect(Socks.SUCCEED)
 		}
 	})
 }
