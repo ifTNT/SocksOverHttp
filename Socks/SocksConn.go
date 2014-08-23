@@ -14,7 +14,7 @@ type SocksConn struct {
 		Port int
 	}
 	conn     *net.TCPConn
-	writeBuf *bytes.Buffer
+	writeBuf bytes.Buffer
 	mother   *SocksServer
 }
 

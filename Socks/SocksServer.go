@@ -110,7 +110,6 @@ func (s *SocksServer) preHandle(conn *net.TCPConn, ch_data chan []byte, ch_err c
 					}
 					NewSocksConn.conn = conn
 					NewSocksConn.mother = s
-					NewSocksConn.writeBuf = bytes.NewBuffer([]byte{})
 					fmt.Println("Remote address of socksConn change to " + NewSocksConn.RemoteAddr2String())
 					go callback(&NewSocksConn, data, false)
 				} else {
