@@ -37,21 +37,21 @@ type SocksServer struct {
 func NewSocksServer(port int) *SocksServer {
 	ln, err := net.ListenTCP("tcp", &net.TCPAddr{net.ParseIP("127.0.0.1"), port, ""})
 	if err != nil {
-		fmt.Printf("Bind with port %d failed\n", port)
+		fmt.Printf("Bind with port %d failure\n", port)
 		err.Error()
 		return nil
 	}
 	return &SocksServer{ln}
 }
 
-type Handle func(*SocksConn, []byte, bool)
+type Handler func(*SocksConn, []byte, bool)
 
-func (s *SocksServer) Listen(callback Handle) { // never return
+func (s *SocksServer) Listen(callback Handler) { // never return
 	defer s.Stop()
 
 	for {
 		if conn, err := s.server.AcceptTCP(); err != nil {
-			fmt.Println("Faild to accept")
+			fmt.Println("Failure to accept")
 			err.Error()
 		} else {
 			go s.preHandle(conn, make(chan []byte), make(chan error), callback)
@@ -70,7 +70,7 @@ func asyncRead(conn *net.TCPConn, data chan []byte, ch_err chan error) { //never
 		data <- buf
 	}
 }
-func (s *SocksServer) preHandle(conn *net.TCPConn, ch_data chan []byte, ch_err chan error, callback Handle) {
+func (s *SocksServer) preHandle(conn *net.TCPConn, ch_data chan []byte, ch_err chan error, callback Handler) {
 	go asyncRead(conn, ch_data, ch_err)
 	NewSocksConn := SocksConn{}
 

@@ -7,7 +7,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"github.com/ifTNT/Socks"
+	"github.com/ifTNT/SocksOnHttp/Socks"
 	"net/http"
 )
 
@@ -48,14 +48,14 @@ func main() {
 			httpClient := &http.Client{}
 			req, err := http.NewRequest("POST", "http://"+REMOTE_ADDR+":"+REMOTE_PORT+"/assets/image/XD.gif", &buf)
 			if err != nil {
-				fmt.Println("Creat http request failed")
+				fmt.Println("Creat http request failure")
 				err.Error()
 			}
 
 			req.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML like Gecko) Chrome/28.0.1469.0 Safari/537.36")
 			req.Header.Add("Content-Type", "text/html")
 			if resp, err := httpClient.Do(req); err != nil && resp.StatusCode != 200 {
-				fmt.Println("Send http request failed")
+				fmt.Println("Send http request failure")
 				err.Error()
 			} else {
 				var contentReader, ungzipBuf bytes.Buffer
@@ -65,7 +65,7 @@ func main() {
 				contentBuf := contentReader.Bytes()
 				ungzip, err := gzip.NewReader(&ungzipBuf)
 				if err != nil {
-					fmt.Println("Ungzip failed")
+					fmt.Println("Ungzip failure")
 					err.Error()
 				}
 				ungzip.Read(contentBuf[6 : len(contentBuf)-2])

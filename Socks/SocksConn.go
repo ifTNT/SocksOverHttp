@@ -30,7 +30,7 @@ func (s *SocksConn) Write(willWrite []byte) {
 }
 func (s *SocksConn) Flush() {
 	if _, err := s.conn.Write(s.writeBuf.Bytes()); err != nil {
-		fmt.Println("Write to " + s.RemoteAddr2String() + " Failed")
+		fmt.Println("Write to " + s.RemoteAddr2String() + " Failure")
 		err.Error()
 	}
 	s.writeBuf.Reset()
