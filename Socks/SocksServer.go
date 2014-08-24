@@ -63,6 +63,7 @@ func asyncRead(conn *net.TCPConn, data chan []byte, ch_err chan error) { //never
 		buf := make([]byte, BUFFER_SIZE)
 		if length, err := conn.Read(buf); err != nil {
 			ch_err <- err
+			//close(data)
 			return
 		} else {
 			buf = buf[:length]

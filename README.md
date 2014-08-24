@@ -1,4 +1,4 @@
-SocksOnHttp
+SocksOverHttp
 ==========
 
 實作socks5(RFC1928), 然後完全偽裝成http欺騙L7 fliter, Content fliter
@@ -6,7 +6,7 @@ SocksOnHttp
 ##Godoc
 ###Socks
 
-`import "github.com/ifTNT/SocksOnHttp/Socks"`  
+`import "github.com/YSITD/SocksOverHttp/Socks"`  
 >  
 > ```go
 SocksServer struct{

@@ -7,7 +7,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"github.com/ifTNT/SocksOnHttp/Socks"
+	"github.com/YSITD/SocksOverHttp/Socks"
 	"net/http"
 )
 
@@ -46,15 +46,15 @@ func main() {
 
 			fmt.Println("Sendding http request")
 			httpClient := &http.Client{}
-			req, err := http.NewRequest("POST", "http://"+REMOTE_ADDR+":"+REMOTE_PORT+"/assets/image/XD.gif", &buf)
+			req, err := http.NewRequest("GET", "http://"+REMOTE_ADDR+":"+REMOTE_PORT+"/assets/image/XD.gif", &buf)
 			if err != nil {
 				fmt.Println("Creat http request failure")
 				err.Error()
 			}
 
 			req.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML like Gecko) Chrome/28.0.1469.0 Safari/537.36")
-			req.Header.Add("Content-Type", "text/html")
-			if resp, err := httpClient.Do(req); err != nil && resp.StatusCode != 200 {
+			req.Header.Add("Content-Type", "image/gif")
+			if resp, err := httpClient.Do(req); err != nil || resp.StatusCode != 200 {
 				fmt.Println("Send http request failure")
 				err.Error()
 			} else {
